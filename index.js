@@ -1,15 +1,18 @@
 var url = require('url');
+var redis = require('redis').createClient;
+var adapter = require('socket.io-redis');
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-var connection = process.env.REDISTOGO_URL.substring('redis://'.length);
-connection = connection.substring(0, connection.length - 1);
+var connection = url.parse(process.env.REDISTOGO_URL);
+var pubsub = redis(connection.hostname, connection.port, {
+    auth_pass: connection.auth.split(':')[1]
+});
 
-console.log(connection);
-
-var redis = require('socket.io-redis');
-io.adapter(redis(connection));
+io.adapter(adapter({
+    pubClient: pubsub, subClient: pubsub
+}));
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
