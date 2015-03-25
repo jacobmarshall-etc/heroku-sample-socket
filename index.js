@@ -6,7 +6,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
 var connection = url.parse(process.env.REDISTOGO_URL);
-var pubsub = redis(connection.hostname, connection.port, {
+var pubsub = redis(connection.port, connection.hostname, {
     auth_pass: connection.auth.split(':')[1]
 });
 
