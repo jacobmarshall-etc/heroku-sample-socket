@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <ul id="messages"></ul>
+
+    <script>
+        var $messages = document.querySelector('#messages');
+
+        var socket = io();
+
+        socket.on('message', function (event) {
+            var $message = document.createElement('li');
+            $message.innerText = event;
+
+            $messages.appendChild($message);
+        });
+    </script>
+</body>
+</html>
