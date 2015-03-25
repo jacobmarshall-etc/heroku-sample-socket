@@ -1,11 +1,13 @@
+var url = require('url');
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-console.log(process.env.REDISTOGO_URL);
-
-var redis = require('socket.io-redis');
-io.adapter(redis(process.env.REDISTOGO_URL));
+var redis = url.parse(process.env.REDISTOGO_URL);
+io.adapter(require('socket.io-redis')({
+    host: redis.hostname,
+    port: redis.port
+}));
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
