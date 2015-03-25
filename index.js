@@ -3,7 +3,7 @@ var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-var connection = process.env.REDISTOGO_URL.substring('redis://'.length, -1);
+var connection = process.env.REDISTOGO_URL.substring('redis://'.length);
 connection = connection.substring(0, connection.length - 1);
 
 console.log(connection);
